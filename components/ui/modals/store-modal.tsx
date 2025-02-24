@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from "react-hook-form";
 import axios from "axios"
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
     name: z.string().min(1, {message: "Name must not be empty."}),
@@ -32,9 +33,9 @@ export const StoreModal = () => {
         try {
             setLoading(true);
             const response = await axios.post('/api/stores', values);
-            console.log(response.data);
+            toast.success('Store created successfully');
         } catch (error) {
-            console.log(error);
+            toast.error('Failed to create store');
         } finally {
             setLoading(false);
         }

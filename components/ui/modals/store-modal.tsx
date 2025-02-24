@@ -45,7 +45,7 @@ export const StoreModal = () => {
             title = "Create store"
             description="Add a new store to manage product and categories"
             isOpen={storeModal.isOpen}
-            onClose={storeModal.onclose}
+            onClose={storeModal.onClose}
         >
             <div>
                 <div className="space-y-4 p-4"></div>
@@ -65,8 +65,8 @@ export const StoreModal = () => {
                             )}
                         />
                         <div className="flex justify-end">
-                            <Button disabled={loading} variant="outline" onClick={storeModal.onclose}>Cancel</Button>
-                            <Button disabled={loading} type="submit">Continue</Button>
+                            <Button type="button" disabled={loading} variant="outline" onClick={storeModal.onClose}>Cancel</Button>
+                            <Button className="ml-2" disabled={loading} type="submit">Continue</Button>
                         </div>
                     </form>
                 </Form>

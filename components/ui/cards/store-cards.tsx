@@ -30,7 +30,7 @@ export default function StoreCards() {
         return (
             <Card>
                 <CardHeader className="flex justify-center items-center h-40">
-                    <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-gray-500 border-dashed rounded-full animate-spin"></div>
                 </CardHeader>
                 <CardContent className="flex justify-center items-center">Loading Stores</CardContent>
             </Card>

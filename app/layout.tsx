@@ -83,7 +83,7 @@ export default function RootLayout({
                     <Button variant="outline">SignIn</Button>
                   </SignInButton>
                   <SignUpButton>
-                    <Button className="ml-2">SignOut</Button>
+                    <Button className="ml-2">SignUp</Button>
                   </SignUpButton>
                 </SignedOut>
                 <SignedIn>

@@ -15,29 +15,30 @@ import toast from "react-hot-toast";
 
 const formSchema = z.object({
     name: z.string().min(1, {message: "Name must not be empty."}),
+    description: z.string().optional(),
 });
 
 export const StoreModal = () => {
     const storeModal = useStoreModal();
-
     const [loading, setLoading] = useState(false)
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
+            description: "",
         },
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setLoading(true);
-            const response = await axios.post('/api/stores', values);
+            await axios.post('/api/stores', values);
             toast.success('Store created successfully');
         } catch (error) {
             toast.error('Failed to create store');
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     }
 
@@ -48,8 +49,7 @@ export const StoreModal = () => {
             isOpen={storeModal.isOpen}
             onClose={storeModal.onClose}
         >
-            <div>
-                <div className="space-y-4 p-4"></div>
+            <div className="space-y-4 p-4">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
@@ -60,6 +60,19 @@ export const StoreModal = () => {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="E-commerce" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Input disabled={loading} placeholder="Brilliant shirt for men!" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

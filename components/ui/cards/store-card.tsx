@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Store } from '@prisma/client';
@@ -12,6 +13,19 @@ import toast from 'react-hot-toast';
 export default function StoreCard({ store }: { store: Store }) {
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [isOpen, setIsOpen] = useState(store.isOpen);
+
+    const handleChange = async () => {
+        try {
+            const newIsOpen = !isOpen;
+            setIsOpen(newIsOpen);
+            await axios.patch("/api/stores", { id: store.id, isOpen: newIsOpen });
+            toast.success("Store updated successfully");
+        } catch (error) {
+            setIsOpen(store.isOpen);
+            toast.error("Failed to update store");
+        }
+    };
 
     async function deleteStore(storeId: string) {
         try {
@@ -49,7 +63,7 @@ export default function StoreCard({ store }: { store: Store }) {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => deleteStore(store.id)}>Continue</AlertDialogAction>
+                                <AlertDialogAction onClick={() => deleteStore(store.id)} disabled={loading}>Continue</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
@@ -60,8 +74,11 @@ export default function StoreCard({ store }: { store: Store }) {
                 <CardContent>
                     <p>{store.description}</p>
                 </CardContent>
+                <div className='flex justify-end h-max align-bottom'>
+                    <Switch checked={isOpen} onCheckedChange={handleChange} />
+                </div>
             </Card>
-        )
+        );
     } else {
         return (<></>);
     }

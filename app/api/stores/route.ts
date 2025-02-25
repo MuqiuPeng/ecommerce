@@ -73,3 +73,34 @@ export async function GET(
         return new NextResponse("Internal error", { status: 500 });
     }
 }
+
+export async function PATCH(
+    req: Request,
+) {
+    try {
+        const { userId } = await auth();
+        const body = await req.json();
+        const { id, isOpen, description } = body;
+        if (!userId) {
+            return new NextResponse("Unauthorised", { status: 401 });
+        }
+        if (!id) {
+            return new NextResponse("ID is required", { status: 400 });
+        }
+        const data = JSON.parse(JSON.stringify({
+            isOpen,
+            description
+        }));
+        const store = await prismadb.store.update({
+            where: {
+                id,
+                userId,
+            },
+            data,
+        });
+        return NextResponse.json(store);
+    } catch (error) {
+        console.log('[STORE_PATCH]', error);
+        return new NextResponse("Internal error", { status: 500 });
+    }
+}

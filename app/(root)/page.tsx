@@ -1,24 +1,19 @@
-"use client";
+import { auth } from '@clerk/nextjs/server';
+import React from 'react';
+import { redirect } from 'next/navigation';
 
-import { Button } from "@/components/ui/button";
-import { useStoreModal } from "@/hooks/use-store-modal";
-import { useEffect } from "react";
-
-const SetupPage = () => {
-    const onOpen = useStoreModal((state) => state.onOpen);
-    const isOpen = useStoreModal((state) => state.isOpen);
-
-    // useEffect(() => {
-    //     if (!isOpen) {
-    //         onOpen();
-    //     }
-    // }, [isOpen, onOpen])
-
+const WelcomePage: React.FC = async () => {
+    const authResult = await auth();
+    const { userId } = authResult;
+    if (userId) {
+        redirect("/profile");
+    }
     return (
-        <div className="p-4">
-            <Button onClick={onOpen}>open</Button>
+        <div className='flex flex-col items-center mt-5'>
+            <h1>Welcome to Ecommerce Admin</h1>
+            <p>Manage your ecommerce platform with ease.</p>
         </div>
     );
-}
+};
 
-export default SetupPage;
+export default WelcomePage;
